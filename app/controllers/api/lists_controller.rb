@@ -3,25 +3,24 @@ class Api::ListsController < ApiController
 
   def create
     user = User.find(params[:user_id])
-    list = user.lists.build(list_params)
+    @list = user.lists.build(list_params)
 
-    if list.save
-      render json: list
+    if @list.save
+      render :create, locals: { list: @list }
     else
-      render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @list.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def update
-    list = List.find(params[:id])
+    @list = List.find(params[:id])
 
-    if list.update(list_params)
-      render json: list
+    if @list.update(update_list_params)
+      render :update, locals: { list: @list }
     else
-      render json: { errors: list.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: @list.errors.full_messages }, status: :unprocessable_entity
     end
   end
-
 
   def destroy
     begin
@@ -33,11 +32,14 @@ class Api::ListsController < ApiController
     end
   end
 
-
   private
 
   def list_params
     params.require(:list).require(:title)
-    params.require(:list).permit(:title)
+    params.require(:list).permit(:title, :permissions)
+  end
+
+  def update_list_params
+    params.require(:list).permit(:title, :permissions)
   end
 end
