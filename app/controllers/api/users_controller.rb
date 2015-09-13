@@ -6,6 +6,12 @@ class Api::UsersController < ApiController
     render :index, locals: { users: @users }
   end
 
+  def show
+    @user = User.find(params[:id])
+    @lists = @user.lists
+    render :show, locals: { user: @user, lists: @lists }
+  end
+
   def create
     @user = User.new(user_params)
     

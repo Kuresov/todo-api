@@ -15,7 +15,7 @@ class Api::ItemsController < ApiController
   def update
     @item = Item.find(params[:id])
 
-    if @item.update(item_params)
+    if @item.update(item_update_params)
       render :update, locals: { item: @item }
     else
       render json: { errors: @item.errors.full_messages }, status: :unprocessable_entity
@@ -27,5 +27,9 @@ class Api::ItemsController < ApiController
   def item_params
     params.require(:item).require(:body)
     params.require(:item).permit(:body)
+  end
+
+  def item_update_params
+    params.require(:item).permit(:body, :completion)
   end
 end
