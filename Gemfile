@@ -25,8 +25,6 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'bcrypt', '~> 3.1.7'
 gem 'has_secure_token'
-gem 'redis'
-gem 'redis-namespace'
 
 # Use Unicorn as the app server
 # gem 'unicorn'
