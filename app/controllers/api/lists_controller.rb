@@ -1,5 +1,14 @@
 class Api::ListsController < ApiController
 
+  def index
+    @lists = User.find(params[:user_id]).lists
+    @lists.each do |list|
+      authorized? @lists
+    end
+
+    render :index, locals: { lists: @lists }
+  end
+
   #POST /api/users/:user_id/lists
   def create
     user = User.find(params[:user_id])
