@@ -1,6 +1,6 @@
 class Api::UsersController < ApiController
-  before_action :authenticated?
 
+  # This is mostly for testing- a production app would return @authorized_user
   def index
     @users = User.all
     render :index, locals: { users: @users }
@@ -8,6 +8,7 @@ class Api::UsersController < ApiController
 
   def show
     @user = User.find(params[:id])
+    authorized? @user
     @lists = @user.lists
     render :show, locals: { user: @user, lists: @lists }
   end
@@ -25,6 +26,8 @@ class Api::UsersController < ApiController
   def destroy
     begin
       user = User.find(params[:id])
+      authorized? user
+
       user.destroy
 
       render json: {}, status: :no_content
@@ -38,5 +41,4 @@ class Api::UsersController < ApiController
   def user_params
     params.require(:user).permit(:email, :password)
   end
-
 end

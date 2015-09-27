@@ -1,9 +1,9 @@
 class Api::ItemsController < ApiController
-  before_action :authenticated?
 
   def create
     list = List.find(params[:list_id])
     @item = list.items.build(item_params)
+    authorized? list
 
     if @item.save
       render :create, locals: { item: @item }
@@ -14,6 +14,7 @@ class Api::ItemsController < ApiController
 
   def update
     @item = Item.find(params[:id])
+    authorized? @item
 
     if @item.update(item_update_params)
       render :update, locals: { item: @item }

@@ -1,5 +1,6 @@
 class Item < ActiveRecord::Base
-  belongs_to :list, dependent: :destroy
+  belongs_to :list
+  delegate :user, to: :list
   before_create :default_values
 
   private

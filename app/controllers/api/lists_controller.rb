@@ -1,8 +1,9 @@
 class Api::ListsController < ApiController
-  before_action :authenticated?
 
+  #POST /api/users/:user_id/lists
   def create
     user = User.find(params[:user_id])
+    authorized? user
     @list = user.lists.build(list_params)
 
     if @list.save
@@ -14,6 +15,7 @@ class Api::ListsController < ApiController
 
   def update
     @list = List.find(params[:id])
+    authorized? @list
 
     if @list.update(update_list_params)
       render :update, locals: { list: @list }
@@ -22,9 +24,12 @@ class Api::ListsController < ApiController
     end
   end
 
+  #DELETE /api/users/:user_id/lists/:id
   def destroy
     begin
       list = List.find(params[:id])
+      authorized? list
+
       list.destroy
       render json: {}, status: :no_content
     rescue ActiveRecord::RecordNotFound
